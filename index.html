@@ -19,7 +19,7 @@
     .topbar {
       display: flex;
       margin-top: 230px;
-      margin-left: 550px;
+      margin-left: 650px;
       color: white;
       font-size: 10px;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -114,6 +114,7 @@
       margin-left: -65px;
       width: 430px;
       height: 90px;
+      color: white;
       align-content: end;
       justify-content: end;
       line-height: 18px;
@@ -173,6 +174,7 @@
       background-color: hsl(230, 51%, 15%);
       border: none;
       font-size: 30px;
+      color: white;
     }
 
     .toggled2 {
@@ -182,6 +184,15 @@
     .toggled1 {
       background-color: hsl(228, 39%, 20%);
     }
+
+    .toggledKeyPad1 {
+      background-color: hsl(228, 39%, 20%);
+    }
+
+    .toggledAnswer1 {
+      background-color: hsl(230, 51%, 15%);
+    }
+
 
     .toggledText1 {
       color: white;
@@ -257,18 +268,18 @@
 
     radios.forEach(radio => {
       radio.addEventListener('change', () => {
-        document.getElementById('output').classList.remove('toggled1', 'toggled2', 'toggled3');
-        document.querySelector('.answer').classList.remove('toggled1', 'toggledAnswer2', 'toggledAnswer3');
-        document.querySelector('.keypad').classList.remove('toggled1', 'toggledKeyPad2', 'toggledKeyPad3');
+        document.getElementById('output').classList.remove('toggledAnswer1', 'toggled2', 'toggled3');
+        document.querySelector('.answer').classList.remove('toggledAnswer1', 'toggledAnswer2', 'toggledAnswer3');
+        document.querySelector('.keypad').classList.remove('toggledKeyPad1', 'toggledKeyPad2', 'toggledKeyPad3');
         document.querySelector('.nums').classList.remove('toggledText1', 'toggledText2', 'toggledText3');
         document.querySelector('.topbar').classList.remove('toggledText1', 'toggledText2', 'toggledText3');
         document.querySelector('.answerstyle').classList.remove('toggledText1', 'toggledText2', 'toggledText3');
 
         if (document.querySelector('#switch3-radio1').checked) {
           body.style.backgroundColor = 'hsl(228, 34%, 28%)';
-          document.getElementById('output').classList.toggle('toggled1')
-          document.querySelector('.answer').classList.toggle('toggled1')
-          document.querySelector('.keypad').classList.toggle('toggled1')
+          document.getElementById('output').classList.toggle('toggledAnswer1')
+          document.querySelector('.answer').classList.toggle('toggledAnswer1')
+          document.querySelector('.keypad').classList.toggle('toggledKeyPad1')
           document.querySelector('.topbar').classList.toggle('toggled1')
           document.querySelector('.answerstyle').classList.toggle('toggledText1')
           document.querySelector('.nums').classList.toggle('toggledText1')
@@ -328,6 +339,7 @@
   <div class="answer">
     <input type="text" id="output" class="answerstyle"> </p>
   </div>
+
   <div class="keypad">
     <button id="btn" onclick="fetchValue(this)"> 7
     </button>

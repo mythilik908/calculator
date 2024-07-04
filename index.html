@@ -4,23 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- displays site properly based on user's device -->
+  <!-- https://mythilik908.github.io/calculator/-->
 
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
 
   <title>Frontend Mentor | Calculator app</title>
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
-    .attribution {
-      font-size: 11px;
-      text-align: center;
-    }
-
-    .attribution a {
-      color: hsl(228, 45%, 44%);
-    }
-
     body {
       display: flex;
       background-color: hsl(228, 34%, 28%)
@@ -41,43 +31,75 @@
       margin-left: 400px;
       font-size: 5px;
       margin-top: 10px;
-      margin-left: 30px;
+      margin-left: 25px;
       color: white;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
-    .toggle__button {
-      display: inline-block;
+    .switch3 {
+      width: 4.5rem;
       position: relative;
-      background-color: gray;
-      width: 3.6rem;
-      height: 1.5rem;
-      margin-top: 3px;
+      height: 20px;
+      display: flex;
+      margin-top: 15px;
       margin-left: -40.0px;
+      background: gray;
       border-radius: 20px;
     }
 
-    .toggle__button::after {
-      content: "";
-      position: absolute;
-      top: 0.2rem;
-      left: 0.2rem;
-      background-color: coral;
-      width: 1.1rem;
-      height: 1.1rem;
-      border-radius: 50%;
+    .switch3 label {
+      padding: 1rem;
+      z-index: 1;
     }
+
+    .switch3::before {
+      content: '';
+      position: absolute;
+      width: 30%;
+      height: 100%;
+      background: coral;
+      border-radius: 20px;
+      transition: .1s left ease;
+    }
+
+    .bg1 {
+      width: 100vw;
+      height: 100vh;
+      background-color: yellow;
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      display: none;
+    }
+
+    .switch3:has(#switch3-radio1:checked)::before {
+      left: 0%;
+    }
+
+    .switch3:has(#switch3-radio2:checked)::before {
+      left: 33%;
+    }
+
+    .switch3:has(#switch3-radio3:checked)::before {
+      left: 66%;
+    }
+
+    .box3 label {
+      padding: 2rem;
+      z-index: 1;
+    }
+
 
     .nums {
       margin-top: -15px;
       width: 30px;
-      letter-spacing: 0.80em !important;
+      letter-spacing: 1.6em !important;
     }
 
     .theme {
       display: flex;
       margin-top: 20px;
-      margin-left: 280px;
+      margin-left: 250px;
       font-size: 10px;
     }
 
@@ -95,6 +117,7 @@
       line-height: 18px;
       padding-right: 20px;
     }
+
 
     .keypad {
       display: flex;
@@ -115,11 +138,17 @@
     }
 
     button {
+      font-weight: 1000;
+      font-size: 25px;
+      background-color: rgb(226, 219, 212);
       width: 90px;
       height: 53px;
       font-family: Verdana, Geneva, Tahoma, sans-serif;
       border-radius: 10px;
-      color: rgb(75, 75, 78)
+      color: rgb(75, 75, 78);
+      border: none;
+      /* Optional: to remove default button border */
+      cursor: pointer;
     }
 
     input[type="text"] {
@@ -129,16 +158,60 @@
       text-align: right;
     }
 
-    input[type="checkbox"]:checked+.toggle__button::after {
-      translate: 2rem 0;
-    }
-
-    input[type="checkbox"]:checked+.toggle__button {
-      background-color: navy
-    }
-
-    input[type="checkbox"] {
+    input[type="radio"] {
       display: none;
+    }
+
+    .bg-blue {
+      background-color: blue;
+    }
+
+    .answerstyle {
+      font-weight: 1000;
+      background-color: hsl(230, 51%, 15%);
+      border: none;
+      color: white;
+      font-size: 30px;
+    }
+
+    .toggled2 {
+      background-color: white
+    }
+
+    .toggled1 {
+      background-color: hsl(228, 39%, 20%);
+    }
+
+    .toggledText1 {
+      background-color: white;
+    }
+
+    .toggledAnswer2 {
+      background-color: white;
+    }
+
+    .toggledKeyPad2 {
+      background-color: rgb(235, 227, 227);
+    }
+
+    .toggledText2 {
+      color: rgb(71, 13, 13);
+    }
+
+    .toggled3 {
+      background-color: rgb(69, 4, 122);
+    }
+
+    .toggledAnswer3 {
+      background-color: rgb(69, 4, 122);
+    }
+
+    .toggledKeyPad3 {
+      background-color: rgb(59, 4, 105);
+    }
+
+    .toggledText3 {
+      color: rgb(229, 219, 43);
     }
   </style>
 </head>
@@ -146,6 +219,7 @@
 <script>
   var values = [];
   var content;
+  var updatedContent;
 
   function fetchValue(element) {
     content = ""
@@ -163,8 +237,9 @@
   }
 
   function deleteval() {
-    var updatedContent = content.toString().slice(0, -1);
+    updatedContent = content.toString().slice(0, -1);
     document.getElementById("output").value = updatedContent;
+    content = updatedContent;
     values.pop();
   }
 
@@ -173,57 +248,100 @@
     values = []
   }
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const radios = document.querySelectorAll('.switch3 input[type="radio"]');
+    const body = document.body;
+
+
+    radios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.getElementById('output').classList.remove('toggled1', 'toggled2', 'toggled3');
+        document.querySelector('.answer').classList.remove('toggled1', 'toggledAnswer2', 'toggledAnswer3');
+        document.querySelector('.keypad').classList.remove('toggled1', 'toggledKeyPad2', 'toggledKeyPad3');
+        document.querySelector('.nums').classList.remove('toggledText1', 'toggledText2', 'toggledText3');
+        document.querySelector('.answerstyle').classList.remove('toggledText1', 'toggledText2', 'toggledText3');
+
+        if (document.querySelector('#switch3-radio1').checked) {
+          body.style.backgroundColor = 'hsl(228, 34%, 28%)';
+          document.getElementById('output').classList.toggle('toggled1')
+          document.querySelector('.answer').classList.toggle('toggled1')
+          document.querySelector('.keypad').classList.toggle('toggled1')
+          document.querySelector('.topbar').classList.toggle('toggled1')
+          document.querySelector('.answerstyle').classList.toggle('toggledText1')
+
+        } else if (document.querySelector('#switch3-radio2').checked) {
+          body.style.backgroundColor = 'rgb(254, 250, 250)';
+          document.getElementById('output').classList.toggle('toggled2')
+          document.querySelector('.answer').classList.toggle('toggledAnswer2')
+          document.querySelector('.keypad').classList.toggle('toggledKeyPad2')
+          document.querySelector('.topbar').classList.toggle('toggledText2')
+          document.querySelector('.answerstyle').classList.toggle('toggledText2')
+
+        } else if (document.querySelector('#switch3-radio3').checked) {
+          body.style.backgroundColor = 'rgb(34, 6, 66)';
+          document.getElementById('output').classList.toggle('toggled3')
+          document.querySelector('.answer').classList.toggle('toggledAnswer3')
+          document.querySelector('.keypad').classList.toggle('toggledKeyPad3')
+          document.querySelector('.topbar').classList.toggle('toggledText3')
+          document.querySelector('.answerstyle').classList.toggle('toggledText3')
+
+        }
+      });
+    });
+
+    // Trigger the change event on page load to set the initial background color
+    radios.forEach(radio => {
+      if (radio.checked) {
+        radio.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+
 </script>
 
 <body>
   <div class="topbar">
     <h1> calc </h1>
     <h1 class="theme"> THEME</h1>
+
     <div class="toggle__display">
       <h1 class="nums"> 123 </h1>
-      <input type="checkbox" id="toggle">
-      <label for="toggle" class="toggle__button"></label>
+    </div>
+
+    <div class="switch3">
+      <input type="radio" id="switch3-radio1" name="radio" style="--bg: red" />
+      <label for="switch3-radio1"></label>
+
+      <input type="radio" id="switch3-radio2" name="radio" style="--bg: black" />
+      <label for="switch3-radio2"></label>
+
+      <input type="radio" id="switch3-radio3" name="radio" style="--bg: yellow" />
+      <label for="switch3-radio3"></label>
     </div>
   </div>
+
   <div class="answer">
-    <input type="text" id="output"
-      style="font-weight: 1000;background-color: hsl(230, 51%, 15%);border: none;color: white; font-size: 30px;"> </p>
+    <input type="text" id="output" class="answerstyle"> </p>
   </div>
   <div class="keypad">
-    <button id="btn07" onclick="fetchValue(this)"
-      style="font-weight: 1000; font-size: 25px; background-color: rgb(226, 219, 212);"> 7
+    <button id="btn07" onclick="fetchValue(this)"> 7
     </button>
-    <button id="btn08" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 8 </button>
-    <button id="btn09" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 9 </button>
-    <button id="btndel" onclick="deleteval()"
-      style="font-weight: 1000;font-size: 20px;color:white ;background-color:hsl(231, 65%, 78%)"> DEL
+    <button id="btn08" onclick="fetchValue(this)"> 8 </button>
+    <button id="btn09" onclick="fetchValue(this)"> 9 </button>
+    <button id="btndel" onclick="deleteval()"> DEL
     </button>
-    <button id="btn04" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 4 </button>
-    <button id="btn05" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 5 </button>
-    <button id="btn06" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 6 </button>
-    <button id="btn+" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> + </button>
-    <button id="btn01" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 1 </button>
-    <button id="btn02" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 2 </button>
-    <button id="btn03" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 3 </button>
-    <button id="btn-" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> - </button>
-    <button id="btn." onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> . </button>
-    <button id="btn00" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> 0 </button>
-    <button id="btn/" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> / </button>
-    <button id="btnx" onclick="fetchValue(this)"
-      style="font-weight: 1000;font-size: 25px;background-color: rgb(226, 219, 212);"> * </button>
+    <button id="btn04" onclick="fetchValue(this)"> 4 </button>
+    <button id="btn05" onclick="fetchValue(this)"> 5 </button>
+    <button id="btn06" onclick="fetchValue(this)"> 6 </button>
+    <button id="btn+" onclick="fetchValue(this)"> + </button>
+    <button id="btn01" onclick="fetchValue(this)"> 1 </button>
+    <button id="btn02" onclick="fetchValue(this)"> 2 </button>
+    <button id="btn03" onclick="fetchValue(this)"> 3 </button>
+    <button id="btn-" onclick="fetchValue(this)"> - </button>
+    <button id="btn." onclick="fetchValue(this)"> . </button>
+    <button id="btn00" onclick="fetchValue(this)"> 0 </button>
+    <button id="btn/" onclick="fetchValue(this)"> / </button>
+    <button id="btnx" onclick="fetchValue(this)"> * </button>
     <button id="btnrst" onclick="reset()"
       style="font-weight: 1000;font-size: 20px; width: 200px;background-color:hsl(231, 65%, 78%);color: white;">
       RESET </button>
@@ -232,8 +350,6 @@
     </button>
   </div>
   </div>
-
-
 </body>
 
 </html>
